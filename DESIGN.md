@@ -90,7 +90,7 @@ That's the full list. Explicitly **not** in the POC: comments, follows, DMs, not
 - **All-time score** = lifetime Ws (boosts excluded).
 - Ties break by earliest post time (rewards posting early, spreads activity across the day).
 
-## 6. Data model (Postgres)
+## 6. Data model (D1 / SQLite)
 
 ```
 users        id, google_id, handle, x_handle, avatar_url, streak_count,
@@ -110,9 +110,9 @@ Posts become `public` only when a `payments` row with `kind=publish, status=paid
 
 ## 7. Architecture
 
-- **Next.js App Router on Vercel.** Server components for feeds/leaderboards, API routes for votes/posts/webhooks. One deploy target, zero ops.
-- **Neon Postgres + Drizzle ORM.** Leaderboards are simple aggregate queries at POC scale; add a materialized view or cache only if it ever gets slow.
-- **Auth.js** (Google provider), **Stripe Checkout + webhook**, **@vercel/og** for share cards, **PostHog** for the two metrics plus funnel events (`sign_in`, `post_created`, `checkout_started`, `checkout_paid`, `w_given`, `boost_paid`, `share_clicked`, `group_joined`).
+- **Astro (SSR) + React islands on Cloudflare Workers** via `@astrojs/cloudflare` and wrangler — same stack as `whatsnext`. Astro pages for feeds/leaderboards, API routes for votes/posts/webhooks. One deploy target, zero ops.
+- **D1 (SQLite) + Drizzle ORM**, migrations via `wrangler d1 migrations apply`. Leaderboards are simple aggregate queries at POC scale. **R2** for post images.
+- **Hand-rolled Google OAuth** (authorization-code flow, D1-backed sessions, HttpOnly cookie), **Stripe Checkout + webhook** (fetch HTTP client + SubtleCrypto signature verification on Workers), **workers-og** for share cards, **PostHog** for the two metrics plus funnel events (`sign_in`, `post_created`, `checkout_started`, `checkout_paid`, `w_given`, `boost_paid`, `share_clicked`, `group_joined`).
 - **Anti-bot stack:** Google-only auth + 1 post/day + $1 public gate + per-IP rate limits on votes. That's plenty for a POC.
 
 ## 8. Brand / tone

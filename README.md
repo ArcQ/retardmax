@@ -24,10 +24,10 @@ Everything in scope must move one of these. Everything else is cut.
 - [DESIGN.md](DESIGN.md) — product design, features, data model, architecture
 - [ROADMAP.md](ROADMAP.md) — 3-month POC plan
 
-## Stack (planned)
+## Stack
 
-Next.js (App Router) on Vercel · Postgres (Neon) · Auth.js with Google provider · Stripe Checkout · Tailwind · PostHog for analytics.
+Mirrors the `whatsnext` stack: Astro (SSR) + React islands on Cloudflare Workers (`@astrojs/cloudflare` + wrangler) · D1 (SQLite) via Drizzle ORM · R2 for images · Tailwind · hand-rolled Google OAuth with D1-backed sessions · Stripe Checkout · PostHog for analytics.
 
 ## Status
 
-Pre-code. Design phase. See ROADMAP.md for Month 1 build list.
+In build. See SPEC.md for the implementation spec and ROADMAP.md for the phased plan.
