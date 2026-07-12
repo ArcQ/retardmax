@@ -1,0 +1,6 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'; import { eq } from 'drizzle-orm'; import { db } from '@/lib/db/db'; import { groups } from '@/lib/db/schema';
+import { getEnv } from '@/lib/env';
+const code = Astro.params.code!.toUpperCase(); const group = await db(getEnv(Astro.locals).DB).select().from(groups).where(eq(groups.inviteCode, code)).get();
+---
+<BaseLayout title="Join group — RETARDMAX"><section class="mx-auto max-w-lg space-y-5 text-center"><p class="eyebrow">You have been summoned</p><h1 class="font-display text-6xl">{group?.name ?? 'UNKNOWN CREW'}</h1>{group ? <form action="/api/groups/join" method="POST"><input type="hidden" name="code" value={code} /><button class="btn-flame">Join this group</button></form> : <p class="text-white/50">That invite has expired or never existed.</p>}</section></BaseLayout>

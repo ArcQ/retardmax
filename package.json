@@ -1,0 +1,41 @@
+{
+  "name": "retardmax",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro build && wrangler dev",
+    "deploy:prod": "npm run build && wrangler deploy",
+    "cf:types": "wrangler types",
+    "db:local:migrate": "wrangler d1 migrations apply retardmax --local",
+    "db:prod:migrate": "wrangler d1 migrations apply retardmax --remote",
+    "db:generate": "drizzle-kit generate",
+    "seed": "tsx scripts/seed.ts"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "latest",
+    "@astrojs/react": "latest",
+    "astro": "latest",
+    "drizzle-orm": "latest",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "stripe": "latest",
+    "workers-og": "^0.0.27"
+  },
+  "devDependencies": {
+    "@astrojs/check": "latest",
+    "@cloudflare/workers-types": "latest",
+    "@types/node": "^20.10.4",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "autoprefixer": "^10.4.16",
+    "drizzle-kit": "latest",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.4.17",
+    "tsx": "latest",
+    "typescript": "^5.3.3",
+    "wrangler": "latest"
+  }
+}

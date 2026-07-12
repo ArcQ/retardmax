@@ -1,0 +1,4 @@
+import type { APIRoute } from 'astro';
+import { db } from '@/lib/db/db'; import { groupMembers, groups } from '@/lib/db/schema'; import { requireUser } from '@/lib/server'; import { error, ulid } from '@/lib/utils'; import { getEnv } from '@/lib/env';
+const code = () => crypto.randomUUID().replace(/-/g, '').slice(0, 8).toUpperCase();
+export const POST: APIRoute = async (context) => { const user = requireUser(context); const form = await context.request.formData(); const name = String(form.get('name') ?? '').trim().slice(0, 60); if (!name) return error('Name your group.'); const d = db(getEnv(context.locals).DB); const group = { id: ulid(), name, inviteCode: code(), creatorUserId: user.id }; await d.insert(groups).values(group); await d.insert(groupMembers).values({ groupId: group.id, userId: user.id }); return context.redirect(`/g/${group.id}`); };

@@ -1,0 +1,16 @@
+---
+import PostActions from './PostActions';
+const { post, user, rank } = Astro.props;
+const isOwner = user?.id === post.authorId;
+---
+<article class="card overflow-hidden p-5">
+  <div class="flex items-start gap-3">
+    {rank && <div class="font-display text-3xl text-flame">{rank}</div>}
+    <img src={post.avatarUrl ?? `https://api.dicebear.com/9.x/initials/svg?seed=${post.handle}`} alt="" class="h-10 w-10 rounded-full border border-white/15" />
+    <div class="min-w-0 flex-1"><div class="flex flex-wrap items-center gap-2"><a href={`/u/${post.handle}`} class="font-black hover:text-flame">@{post.handle}</a><span class="text-xs text-white/45">🔥 {post.streakCount}</span>{post.visibility === 'private' && <span class="rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-black uppercase text-white/45">private</span>}</div><p class="text-xs text-white/35">{post.createdAt.toISOString().replace('T', ' ').slice(0, 16)} UTC</p></div>
+    {post.xHandle && <a href={`https://x.com/${post.xHandle.replace(/^@/, '')}`} target="_blank" rel="noreferrer" class="text-xs font-bold text-white/45 hover:text-white">𝕏 @{post.xHandle.replace(/^@/, '')}</a>}
+  </div>
+  <a href={`/p/${post.id}`} class="mt-4 block whitespace-pre-wrap text-xl font-bold leading-snug hover:text-white/80">{post.body}</a>
+  {post.imageKey && <img src={`/media/${post.imageKey}`} alt="Post image" class="mt-4 max-h-96 w-full rounded-xl object-cover" />}
+  <div class="mt-5 flex items-center justify-between gap-3"><PostActions client:load postId={post.id} initialVotes={post.wCount} initialBoosts={post.boostCount} voted={post.voted} canVote={Boolean(user) && !isOwner && post.visibility === 'public'} canBoost={Boolean(user) && post.visibility === 'public'} body={post.body} /><span class="text-xs font-black uppercase tracking-wider text-white/25">{post.dailyScore} daily pts</span></div>
+</article>
