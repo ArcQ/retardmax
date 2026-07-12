@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
-    "preview": "astro build && wrangler dev",
-    "deploy:prod": "npm run build && wrangler deploy",
+    "preview": "astro build && wrangler dev --config dist/server/wrangler.json --persist-to .wrangler/state",
+    "deploy:prod": "npm run build && wrangler deploy --config dist/server/wrangler.json",
     "cf:types": "wrangler types",
-    "db:local:migrate": "wrangler d1 migrations apply retardmax --local",
+    "db:local:migrate": "wrangler d1 migrations apply retardmax --local --persist-to .wrangler/state",
     "db:prod:migrate": "wrangler d1 migrations apply retardmax --remote",
     "db:generate": "drizzle-kit generate",
     "seed": "tsx scripts/seed.ts"
@@ -17,6 +17,7 @@
   "dependencies": {
     "@astrojs/cloudflare": "latest",
     "@astrojs/react": "latest",
+    "@fontsource/anton": "^5.2.7",
     "astro": "latest",
     "drizzle-orm": "latest",
     "react": "^18.2.0",

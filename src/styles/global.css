@@ -1,3 +1,4 @@
+@import '@fontsource/anton/latin-400.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,10 +7,32 @@
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 320px; background: radial-gradient(circle at 50% -10%, #29100b 0, #090909 42rem); }
 a { color: inherit; text-decoration: none; }
-button, input, textarea { font: inherit; }
+button, input, textarea, select { font: inherit; }
+
+/* Poster display type — condensed, tight, all-caps energy */
+.font-display { letter-spacing: 0.005em; font-weight: 400; text-transform: uppercase; }
+
+/* Visible keyboard focus everywhere — never rely on hover alone */
+:focus-visible { outline: 2px solid #ff4d2e; outline-offset: 2px; border-radius: 6px; }
+a:focus-visible, button:focus-visible { outline-offset: 3px; }
+input:focus-visible, textarea:focus-visible, select:focus-visible { outline: none; }
+
 .poster-grid { background-image: linear-gradient(#ffffff08 1px, transparent 1px), linear-gradient(90deg, #ffffff08 1px, transparent 1px); background-size: 28px 28px; }
 .card { @apply rounded-2xl border border-white/10 bg-white/[0.055] shadow-2xl shadow-black/30; }
-.btn { @apply inline-flex items-center justify-center rounded-xl px-4 py-2 font-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50; }
-.btn-flame { @apply btn bg-flame text-white shadow-lg shadow-flame/20; }
-.btn-quiet { @apply btn border border-white/15 bg-white/5 text-white hover:bg-white/10; }
+.btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-black uppercase tracking-wide transition duration-150 hover:-translate-y-0.5 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0; }
+.btn-flame { @apply btn bg-flame text-white shadow-lg shadow-flame/25 hover:brightness-110 hover:shadow-flame/40; }
+.btn-quiet { @apply btn border border-white/15 bg-white/5 text-white hover:bg-white/10 hover:text-white; }
 .eyebrow { @apply text-xs font-black uppercase tracking-[0.22em] text-flame; }
+
+/* Text inputs — consistent field treatment with a flame focus ring */
+.field { @apply w-full rounded-xl border border-white/10 bg-black/30 p-3 outline-none transition placeholder:text-white/30 focus:border-flame/60 focus:ring-2 focus:ring-flame/40; }
+
+/* Sports-standings medal accents for the top 3 leaderboard rows */
+.medal { @apply relative; }
+.medal::before { content: ''; @apply pointer-events-none absolute inset-y-0 left-0 w-1 rounded-l-2xl; }
+.medal-gold { @apply border-gold/35; }
+.medal-gold::before { background: #f5c451; }
+.medal-silver { @apply border-silver/30; }
+.medal-silver::before { background: #cfd4dd; }
+.medal-bronze { @apply border-bronze/35; }
+.medal-bronze::before { background: #cd8a4f; }

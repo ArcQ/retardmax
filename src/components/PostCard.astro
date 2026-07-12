@@ -2,15 +2,36 @@
 import PostActions from './PostActions';
 const { post, user, rank } = Astro.props;
 const isOwner = user?.id === post.authorId;
+const medal = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : null;
+const rankColor = medal === 'gold' ? 'text-gold' : medal === 'silver' ? 'text-silver' : medal === 'bronze' ? 'text-bronze' : 'text-white/25';
 ---
-<article class="card overflow-hidden p-5">
-  <div class="flex items-start gap-3">
-    {rank && <div class="font-display text-3xl text-flame">{rank}</div>}
-    <img src={post.avatarUrl ?? `https://api.dicebear.com/9.x/initials/svg?seed=${post.handle}`} alt="" class="h-10 w-10 rounded-full border border-white/15" />
-    <div class="min-w-0 flex-1"><div class="flex flex-wrap items-center gap-2"><a href={`/u/${post.handle}`} class="font-black hover:text-flame">@{post.handle}</a><span class="text-xs text-white/45">🔥 {post.streakCount}</span>{post.visibility === 'private' && <span class="rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-black uppercase text-white/45">private</span>}</div><p class="text-xs text-white/35">{post.createdAt.toISOString().replace('T', ' ').slice(0, 16)} UTC</p></div>
-    {post.xHandle && <a href={`https://x.com/${post.xHandle.replace(/^@/, '')}`} target="_blank" rel="noreferrer" class="text-xs font-bold text-white/45 hover:text-white">𝕏 @{post.xHandle.replace(/^@/, '')}</a>}
+<article class={`card overflow-hidden p-5 sm:p-6 ${medal ? `medal medal-${medal}` : ''}`}>
+  <div class="flex gap-4">
+    {rank && (
+      <div class="flex w-10 shrink-0 flex-col items-center pt-0.5 sm:w-14">
+        <span class={`font-display text-4xl leading-none tabular-nums sm:text-6xl ${rankColor}`}>{rank}</span>
+        {medal && <span class="mt-1 text-[9px] font-black uppercase tracking-[0.18em] text-white/40">{medal}</span>}
+      </div>
+    )}
+    <div class="min-w-0 flex-1">
+      <div class="flex items-start gap-3">
+        <img src={post.avatarUrl ?? `https://api.dicebear.com/9.x/initials/svg?seed=${post.handle}`} alt="" class="h-10 w-10 shrink-0 rounded-full border border-white/15" />
+        <div class="min-w-0 flex-1">
+          <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <a href={`/u/${post.handle}`} class="font-black hover:text-flame">@{post.handle}</a>
+            <span class="text-xs font-bold text-white/45">🔥 {post.streakCount}</span>
+            {post.visibility === 'private' && <span class="rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-black uppercase tracking-wide text-white/45">private</span>}
+          </div>
+          <p class="text-xs text-white/35">{post.createdAt.toISOString().replace('T', ' ').slice(0, 16)} UTC</p>
+        </div>
+        {post.xHandle && <a href={`https://x.com/${post.xHandle.replace(/^@/, '')}`} target="_blank" rel="noreferrer" class="shrink-0 text-xs font-bold text-white/45 hover:text-white">𝕏 @{post.xHandle.replace(/^@/, '')}</a>}
+      </div>
+      <a href={`/p/${post.id}`} class="mt-3 block whitespace-pre-wrap text-xl font-bold leading-snug tracking-tight hover:text-white/80 sm:text-2xl">{post.body}</a>
+      {post.imageKey && <img src={`/media/${post.imageKey}`} alt="Post image" class="mt-4 max-h-96 w-full rounded-xl border border-white/10 object-cover" />}
+      <div class="mt-5 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-white/5 pt-4">
+        <PostActions client:load postId={post.id} initialVotes={post.wCount} initialBoosts={post.boostCount} voted={post.voted} canVote={Boolean(user) && !isOwner && post.visibility === 'public'} canBoost={Boolean(user) && post.visibility === 'public'} body={post.body} />
+        <span class="font-display text-sm tabular-nums text-white/30">{post.dailyScore} <span class="text-white/25">PTS</span></span>
+      </div>
+    </div>
   </div>
-  <a href={`/p/${post.id}`} class="mt-4 block whitespace-pre-wrap text-xl font-bold leading-snug hover:text-white/80">{post.body}</a>
-  {post.imageKey && <img src={`/media/${post.imageKey}`} alt="Post image" class="mt-4 max-h-96 w-full rounded-xl object-cover" />}
-  <div class="mt-5 flex items-center justify-between gap-3"><PostActions client:load postId={post.id} initialVotes={post.wCount} initialBoosts={post.boostCount} voted={post.voted} canVote={Boolean(user) && !isOwner && post.visibility === 'public'} canBoost={Boolean(user) && post.visibility === 'public'} body={post.body} /><span class="text-xs font-black uppercase tracking-wider text-white/25">{post.dailyScore} daily pts</span></div>
 </article>

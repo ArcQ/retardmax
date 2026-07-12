@@ -28,14 +28,12 @@ const env = getEnv(Astro.locals);
         </div>
         {user ? <a href="/settings" class="flex items-center gap-2 text-sm font-bold"><img src={user.avatarUrl ?? 'https://api.dicebear.com/9.x/initials/svg?seed=' + user.handle} alt="" class="h-8 w-8 rounded-full border border-white/20" /><span class="hidden sm:inline">@{user.handle}</span></a> : <a href="/api/auth/login" class="btn-flame px-3 py-2 text-sm">Sign in</a>}
       </nav>
+      <div class="flex items-center gap-5 overflow-x-auto px-4 pb-3 text-sm font-bold text-white/65 sm:hidden">
+        <a href="/" class="shrink-0 hover:text-white">Today</a><a href="/all-time" class="shrink-0 hover:text-white">All-Time</a><a href="/g" class="shrink-0 hover:text-white">Groups</a><a href="/log" class="shrink-0 hover:text-white">My Log</a>
+      </div>
     </header>
     <main class="mx-auto w-full max-w-3xl px-4 pb-16 pt-8"><slot /></main>
-    <footer class="mx-auto max-w-3xl border-t border-white/10 px-4 py-8 text-center text-xs leading-5 text-white/40">Retardmaxxing is about YOUR bold moves. Doxxing, harassment, targeting people = deleted + banned.</footer>
+    <footer class="mx-auto max-w-3xl border-t border-white/10 px-4 py-10 text-center"><p class="font-display text-2xl tracking-tight text-white/70">RETARD<span class="text-flame">MAX</span></p><p class="mx-auto mt-3 max-w-md text-xs leading-5 text-white/40">Retardmaxxing is about YOUR bold moves. Doxxing, harassment, targeting people = deleted + banned.</p></footer>
     {env?.SITE_URL && <script is:inline define:vars={{ siteUrl: env.SITE_URL }}>window.__RMX_SITE_URL__ = siteUrl;</script>}
-    <script is:inline>
-      if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && import.meta.env.PUBLIC_POSTHOG_KEY) {
-        const s = document.createElement('script'); s.src = 'https://cdn.posthog.com/posthog.js'; s.async = true; document.head.appendChild(s);
-      }
-    </script>
   </body>
 </html>
