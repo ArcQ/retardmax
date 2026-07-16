@@ -1,5 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
+  "account_id": "fe2c86153302a14b9302ca41c5d0c9e4",
   "name": "retardmax",
   "compatibility_date": "2026-07-12",
   "compatibility_flags": ["nodejs_compat"],

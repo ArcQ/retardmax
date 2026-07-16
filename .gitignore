@@ -2,7 +2,19 @@ node_modules/
 dist/
 .astro/
 .env*
-.dev.vars
+.dev.vars*
 .wrangler/
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
 .DS_Store
 tsconfig.tsbuildinfo
+
+# Local agent tooling
+.claude/
+.codex/
+.gstack/
+.easy-launch/
