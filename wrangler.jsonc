@@ -2,17 +2,18 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "account_id": "fe2c86153302a14b9302ca41c5d0c9e4",
   "name": "retardmax",
+  "account_id": "3601df4fca16b47f745b38c8cba77cf3",
   "compatibility_date": "2026-07-12",
   "compatibility_flags": ["nodejs_compat"],
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "retardmax",
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "database_id": "f0664fe1-f5c6-4366-81df-93bd1feef5d1",
       "migrations_dir": "drizzle/migrations"
     }
   ],
   "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "retardmax-media" }],
-  "vars": { "SITE_URL": "http://localhost:8787" },
+  "vars": { "SITE_URL": "https://retardmax.eddielaw296.workers.dev" },
   "observability": { "enabled": true, "head_sampling_rate": 1 }
 }
