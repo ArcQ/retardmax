@@ -3,11 +3,16 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "packageManager": "pnpm@9.9.0",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
-    "preview": "astro build && wrangler dev --config dist/server/wrangler.json --persist-to .wrangler/state",
-    "deploy:prod": "npm run build && wrangler deploy --config dist/server/wrangler.json",
+    "preview": "pnpm run build && wrangler dev --config dist/server/wrangler.json --persist-to .wrangler/state",
+    "deploy": "pnpm run deploy:prod",
+    "deploy:prod": "pnpm run build && pnpm run db:prod:migrate && wrangler deploy --config dist/server/wrangler.json",
     "cf:types": "wrangler types",
     "db:local:migrate": "wrangler d1 migrations apply retardmax --local --persist-to .wrangler/state",
     "db:prod:migrate": "wrangler d1 migrations apply retardmax --remote",
@@ -20,6 +25,7 @@
     "@fontsource/anton": "^5.2.7",
     "astro": "latest",
     "drizzle-orm": "latest",
+    "hono": "^4.12.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "stripe": "latest",

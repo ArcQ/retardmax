@@ -3,4 +3,4 @@
  * idempotent route command used by README-DEV.md instead of opening SQLite
  * files behind Wrangler's back.
  */
-console.log('Start `npm run dev` with DEV_FAKE_AUTH=true, then POST /api/dev/seed while signed in.');
+console.log('Start `pnpm run dev` with DEV_FAKE_AUTH=true, then POST /api/dev/seed while signed in.');

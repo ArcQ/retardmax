@@ -6,8 +6,8 @@ Self-contained spec for implementing the site described in DESIGN.md. Follow thi
 
 - Repo root: this directory. Build the app in place (not a subdirectory).
 - Stack mirrors `/Users/eddie/dev/products/whatsnext`: Astro `output: 'server'` + `@astrojs/cloudflare` adapter, React 18 islands, Tailwind 3, Drizzle ORM + drizzle-kit (sqlite dialect, D1), wrangler with `nodejs_compat`. Use `@` path alias to `./src`.
-- Must pass `npm run build` (`astro check && astro build`) with zero errors.
-- Must run fully locally with `wrangler dev` local D1/R2 (`npm run preview`) and no real Google/Stripe credentials, via the dev flags in §8.
+- Must pass `pnpm run build` (`astro check && astro build`) with zero errors.
+- Must run fully locally with `wrangler dev` local D1/R2 (`pnpm run preview`) and no real Google/Stripe credentials, via the dev flags in §8.
 - TypeScript throughout. Keep code plain and boring; no premature abstraction.
 - Timezone: **UTC everywhere**. `posted_on` is the UTC date string `YYYY-MM-DD`. One post per user per UTC day, enforced server-side by unique index.
 
@@ -101,11 +101,11 @@ Generate real migrations with drizzle-kit into `drizzle/migrations`. npm scripts
 ## 10. Seed + docs
 
 - `scripts/seed.ts` (run with tsx against local D1 via wrangler, or a `POST /api/dev/seed` route gated by DEV_FAKE_AUTH — pick whichever is more reliable locally): ~8 users, ~25 posts across the last 5 days (mix public/private), votes, a couple boosts, one group with members, 1 pin. Bodies should read like real retardmaxes ("cold-called 100 people before 9am", "shipped at 4:41am, slept in the office", …).
-- `README-DEV.md`: local setup (install, migrate local D1, `.dev.vars` template, dev flags, seed, `npm run preview`), prod deploy steps (create D1 + R2, secrets, Google OAuth consent + redirect URI, Stripe webhook endpoint), and a checklist of what's intentionally fake in dev mode.
+- `README-DEV.md`: local setup (install, migrate local D1, `.dev.vars` template, dev flags, seed, `pnpm run preview`), prod deploy steps (create D1 + R2, secrets, Google OAuth consent + redirect URI, Stripe webhook endpoint), and a checklist of what's intentionally fake in dev mode.
 
 ## 11. Acceptance checklist (verify before finishing)
 
-1. `npm install` then `npm run build` → zero errors.
+1. `pnpm install` then `pnpm run build` → zero errors.
 2. Local run with both dev flags: fake-login as two users; user A posts (streak=1), pays fake $1 → appears on `/`; user B gives a W; daily Top 10 reflects it; boost adds +5 and ⚡.
 3. Second post same UTC day → 409 surfaced as a friendly error.
 4. Group create/join/share works; group leaderboard shows shared private post; non-member gets 404/redirect on `/g/[id]`.
