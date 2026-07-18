@@ -2,6 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "retardmax",
   "account_id": "3601df4fca16b47f745b38c8cba77cf3",
+  "workers_dev": true,
   "routes": [
     { "pattern": "beretardmax.com", "custom_domain": true },
     { "pattern": "www.beretardmax.com", "custom_domain": true }
