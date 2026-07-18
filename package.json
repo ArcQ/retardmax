@@ -13,6 +13,7 @@
     "preview": "pnpm run build && wrangler dev --config dist/server/wrangler.json --persist-to .wrangler/state",
     "deploy": "pnpm run deploy:prod",
     "deploy:prod": "pnpm run build && pnpm run db:prod:migrate && wrangler deploy --config dist/server/wrangler.json",
+    "prod": "npm run deploy:prod",
     "cf:types": "wrangler types",
     "db:local:migrate": "wrangler d1 migrations apply retardmax --local --persist-to .wrangler/state",
     "db:prod:migrate": "wrangler d1 migrations apply retardmax --remote",
