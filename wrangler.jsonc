@@ -1,8 +1,11 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "account_id": "fe2c86153302a14b9302ca41c5d0c9e4",
   "name": "retardmax",
   "account_id": "3601df4fca16b47f745b38c8cba77cf3",
+  "routes": [
+    { "pattern": "beretardmax.com", "custom_domain": true },
+    { "pattern": "www.beretardmax.com", "custom_domain": true }
+  ],
   "compatibility_date": "2026-07-12",
   "compatibility_flags": ["nodejs_compat"],
   "d1_databases": [
@@ -14,6 +17,6 @@
     }
   ],
   "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "retardmax-media" }],
-  "vars": { "SITE_URL": "https://retardmax.eddielaw296.workers.dev" },
+  "vars": { "SITE_URL": "https://beretardmax.com" },
   "observability": { "enabled": true, "head_sampling_rate": 1 }
 }
