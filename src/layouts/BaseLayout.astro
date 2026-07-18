@@ -24,12 +24,12 @@ const env = getEnv(Astro.locals);
       <nav class="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-4">
         <a href="/" class="font-display text-2xl tracking-tight text-white">RETARD<span class="text-flame">MAX</span></a>
         <div class="hidden items-center gap-4 text-sm font-bold text-white/65 sm:flex">
-          <a href="/" class="hover:text-white">Today</a><a href="/all-time" class="hover:text-white">All-Time</a><a href="/g" class="hover:text-white">Groups</a><a href="/log" class="hover:text-white">My Log</a>
+          <a href="/" class="hover:text-white">Today</a><a href="/all-time" class="hover:text-white">All-Time</a><a href="/g" class="hover:text-white">Groups</a><a href="/log" class="hover:text-white">My Log</a><a href="/credits" class="text-flame hover:text-white">Load Up</a>
         </div>
         {user ? <a href="/settings" class="flex items-center gap-2 text-sm font-bold"><img src={user.avatarUrl ?? 'https://api.dicebear.com/9.x/initials/svg?seed=' + user.handle} alt="" class="h-8 w-8 rounded-full border border-white/20" /><span class="hidden sm:inline">@{user.handle}</span></a> : <a href="/api/auth/login" class="btn-flame px-3 py-2 text-sm">Sign in</a>}
       </nav>
       <div class="flex items-center gap-5 overflow-x-auto px-4 pb-3 text-sm font-bold text-white/65 sm:hidden">
-        <a href="/" class="shrink-0 hover:text-white">Today</a><a href="/all-time" class="shrink-0 hover:text-white">All-Time</a><a href="/g" class="shrink-0 hover:text-white">Groups</a><a href="/log" class="shrink-0 hover:text-white">My Log</a>
+        <a href="/" class="shrink-0 hover:text-white">Today</a><a href="/all-time" class="shrink-0 hover:text-white">All-Time</a><a href="/g" class="shrink-0 hover:text-white">Groups</a><a href="/log" class="shrink-0 hover:text-white">My Log</a><a href="/credits" class="shrink-0 text-flame hover:text-white">Load Up</a>
       </div>
     </header>
     <main class="mx-auto w-full max-w-3xl px-4 pb-16 pt-8"><slot /></main>

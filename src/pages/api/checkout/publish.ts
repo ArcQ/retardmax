@@ -1,23 +1,21 @@
 import type { APIRoute } from 'astro';
-import Stripe from 'stripe';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, gt, sql } from 'drizzle-orm';
 import { db } from '@/lib/db/db';
-import { payments, posts } from '@/lib/db/schema';
-import { applyPaid } from '@/lib/payments';
+import { posts, users } from '@/lib/db/schema';
+import { grantDueDailyCredits } from '@/lib/credits';
 import { requireUser } from '@/lib/server';
-import { error, json, ulid, utcDate } from '@/lib/utils';
+import { error, json, utcDate } from '@/lib/utils';
 import { getEnv } from '@/lib/env';
-import { capture } from '@/lib/analytics';
 
+/** Kept at the old URL so existing clients now spend one post credit instead of opening a $1 checkout. */
 export const POST: APIRoute = async (context) => {
-  const user = requireUser(context); const env = getEnv(context.locals); const body = await context.request.json() as { postId?: string }; if (!body.postId) return error('Post required.');
-  const d = db(env.DB); const post = await d.select().from(posts).where(and(eq(posts.id, body.postId), eq(posts.userId, user.id), eq(posts.postedOn, utcDate()), eq(posts.visibility, 'private'))).get(); if (!post) return error('Only your private post from today can be published.', 404);
-  const paymentId = ulid(); await d.insert(payments).values({ id: paymentId, userId: user.id, postId: post.id, kind: 'publish', amountCents: 100, status: 'pending' });
-  capture(env, 'checkout_started', user.id, { kind: 'publish', post_id: post.id });
-  if (env.DEV_FAKE_PAYMENTS === 'true') { await applyPaid(env.DB, paymentId, env); return json({ ok: true, fake: true, redirect: `/p/${post.id}` }); }
-  if (!env.STRIPE_SECRET_KEY) return error('Stripe is not configured.', 503);
-  const stripe = new Stripe(env.STRIPE_SECRET_KEY, { httpClient: Stripe.createFetchHttpClient() });
-  const session = await stripe.checkout.sessions.create({ mode: 'payment', line_items: [{ price_data: { currency: 'usd', product_data: { name: 'Publish your Retardmax' }, unit_amount: 100 }, quantity: 1 }], metadata: { payment_id: paymentId }, success_url: `${env.SITE_URL}/p/${post.id}?paid=1`, cancel_url: `${env.SITE_URL}/p/${post.id}?canceled=1` });
-  await d.update(payments).set({ stripeSessionId: session.id }).where(eq(payments.id, paymentId));
-  return new Response(null, { status: 303, headers: { location: session.url ?? `${env.SITE_URL}/p/${post.id}` } });
+  const user = requireUser(context); const env = getEnv(context.locals); const body = await context.request.json() as { postId?: string };
+  if (!body.postId) return error('Post required.');
+  await grantDueDailyCredits(env.DB, user.id);
+  const d = db(env.DB); const post = await d.select().from(posts).where(and(eq(posts.id, body.postId), eq(posts.userId, user.id), eq(posts.postedOn, utcDate()), eq(posts.visibility, 'private'))).get();
+  if (!post) return error('Only your private post from today can be published.', 404);
+  const spent = await d.update(users).set({ postCredits: sql`${users.postCredits} - 1` }).where(and(eq(users.id, user.id), gt(users.postCredits, 0))).run();
+  if (!spent.meta.changes) return error('You need a post credit. Load up first.', 402);
+  await d.update(posts).set({ visibility: 'public' }).where(eq(posts.id, post.id));
+  return json({ ok: true, redirect: `/p/${post.id}?published=1` });
 };

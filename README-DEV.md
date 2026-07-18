@@ -23,11 +23,11 @@ curl -X POST http://localhost:4321/api/dev/seed
 
 `.dev.vars` is never committed. Production secrets are set with `wrangler secret put`.
 
-Required keys are `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `SESSION_SECRET`, `ADMIN_EMAILS`, `DEV_FAKE_AUTH`, and `DEV_FAKE_PAYMENTS`. `SITE_URL` is a Wrangler variable. Google OAuth needs a redirect URI of `${SITE_URL}/api/auth/callback`; Stripe needs a webhook at `${SITE_URL}/api/stripe/webhook` subscribed to `checkout.session.completed`.
+Required keys are `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `SESSION_SECRET`, `ADMIN_EMAILS`, `DEV_FAKE_AUTH`, and `DEV_FAKE_PAYMENTS`. `SITE_URL` is a Wrangler variable. Google OAuth needs a redirect URI of `${SITE_URL}/api/auth/callback`; Stripe needs a webhook at `${SITE_URL}/api/stripe/webhook` subscribed to `checkout.session.completed`, `invoice.paid`, and `customer.subscription.deleted`. Configure Stripe’s Billing Portal so subscribers can manage or cancel from `/credits`.
 
 ## Production
 
-Create a D1 database named `retardmax` and an R2 bucket named `retardmax-media`, put the real D1 id in `wrangler.jsonc`, apply `pnpm run db:prod:migrate`, configure Google consent-screen credentials and Stripe secrets, then run `pnpm run deploy:prod`.
+Create a D1 database named `retardmax` and an R2 bucket named `retardmax-media`, put the real D1 id in `wrangler.jsonc`, apply `pnpm run db:prod:migrate`, configure Google consent-screen credentials and Stripe secrets, then run `pnpm run deploy:prod`. The credit store creates its Stripe prices at checkout: 4 credits for $3, 12 for $8, 30 for $17, and Daily Max ($12/month, one credit per day). A user’s first store purchase is 50% off.
 
 ## Intentional dev substitutions
 

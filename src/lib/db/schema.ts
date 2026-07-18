@@ -40,10 +40,22 @@ export const payments = sqliteTable('payments', {
   id: text('id').primaryKey(),
   userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   postId: text('post_id').references(() => posts.id, { onDelete: 'set null' }),
-  kind: text('kind', { enum: ['publish', 'boost'] }).notNull(),
+  kind: text('kind', { enum: ['publish', 'boost', 'credit_pack', 'subscription'] }).notNull(),
   stripeSessionId: text('stripe_session_id').unique(),
   amountCents: integer('amount_cents').notNull().default(100),
+  creditsPurchased: integer('credits_purchased').notNull().default(0),
+  stripeSubscriptionId: text('stripe_subscription_id'),
   status: text('status', { enum: ['pending', 'paid'] }).notNull().default('pending'),
+  createdAt: integer('created_at', { mode: 'timestamp_ms' }).notNull().default(now),
+});
+
+export const subscriptions = sqliteTable('subscriptions', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull().unique().references(() => users.id, { onDelete: 'cascade' }),
+  stripeSubscriptionId: text('stripe_subscription_id').notNull().unique(),
+  status: text('status').notNull().default('active'),
+  lastCreditedOn: text('last_credited_on').notNull(),
+  creditsIssuedThisPeriod: integer('credits_issued_this_period').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp_ms' }).notNull().default(now),
 });
 
