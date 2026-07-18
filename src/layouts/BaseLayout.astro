@@ -12,11 +12,23 @@ const env = getEnv(Astro.locals);
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#0b0e12" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, env?.SITE_URL ?? Astro.url.origin).href} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="RETARDMAX" />
+    <meta property="og:url" content={new URL(Astro.url.pathname, env?.SITE_URL ?? Astro.url.origin).href} />
+    <meta property="og:image" content={new URL('/og.svg', env?.SITE_URL ?? Astro.url.origin).href} />
+    <meta property="og:image:type" content="image/svg+xml" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL('/og.svg', env?.SITE_URL ?? Astro.url.origin).href} />
     <slot name="head" />
   </head>
   <body class="poster-grid min-h-screen">
@@ -33,7 +45,7 @@ const env = getEnv(Astro.locals);
       </div>
     </header>
     <main class="mx-auto w-full max-w-3xl px-4 pb-16 pt-8"><slot /></main>
-    <footer class="mx-auto max-w-3xl border-t border-white/10 px-4 py-10 text-center"><p class="font-display text-2xl tracking-tight text-white/70">RETARD<span class="text-flame">MAX</span></p><p class="mx-auto mt-3 max-w-md text-xs leading-5 text-white/40">Retardmaxxing is about YOUR bold moves. Doxxing, harassment, targeting people = deleted + banned.</p></footer>
+    <footer class="mx-auto max-w-3xl border-t border-white/10 px-4 py-10 text-center"><p class="font-display text-2xl tracking-tight text-white/70">RETARD<span class="text-flame">MAX</span></p><p class="mx-auto mt-3 max-w-md text-xs leading-5 text-white/40">Retardmaxxing is about YOUR bold moves. Doxxing, harassment, targeting people = deleted + banned.</p><p class="mt-4 text-xs font-bold text-white/40"><a class="hover:text-white" href="/privacy">Privacy</a> · <a class="hover:text-white" href="/terms">Terms</a></p></footer>
     {env?.SITE_URL && <script is:inline define:vars={{ siteUrl: env.SITE_URL }}>window.__RMX_SITE_URL__ = siteUrl;</script>}
   </body>
 </html>
